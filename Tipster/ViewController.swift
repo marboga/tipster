@@ -25,24 +25,32 @@ class ViewController: UIViewController {
     @IBOutlet var numeralCollection: [UIButton]!
     @IBOutlet weak var clearButton: UIButton!
     
-    var tipPercentSelected: Double = 0.0
+    var groupSizeSelected: Int = 4
+    var tipPercentSelected: Double = 18.0
+    var billTotal: Double = 32.38
+    
     @IBAction func tipPercentSliderChanged(sender: UISlider) {
         tipPercentSelected = Double(sender.value)
-        tipPercentValue.text = String.localizedStringWithFormat("%.1f %@", "Tip: ",tipPercentSelected, "%")
-        tipPercentCollection[0].text = String.localizedStringWithFormat("%.1f %@",(tipPercentSelected - 5), "%")
-        tipPercentCollection[1].text = String.localizedStringWithFormat("%.1f %@",tipPercentSelected, "%")
-        tipPercentCollection[2].text = String.localizedStringWithFormat("%.1f %@",(tipPercentSelected + 5), "%")
+        tipPercentValue.text = "Tip: \(Int(tipPercentSelected))"
+        tipPercentCollection[0].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected - 5), "%")
+        tipPercentCollection[1].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected), "%")
+        tipPercentCollection[2].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected + 5), "%")
     }
     
     @IBAction func groupSizeSliderChanged(sender: UISlider) {
-        let groupSizeSelected = Int(sender.value)
-        groupSizeValue.text = "Group Size: \(groupSizeSelected)"
-        tipAmountCollection[0].text = "\(Double(resultLabel.text!)! * (tipPercentSelected - 5) / 100  )"
+        groupSizeSelected = Int(sender.value)
+        print(groupSizeSelected, " = groupsize,", billTotal, "=billtotal", tipPercentSelected, "=tippercent")
+        groupSizeValue.text = "Group size: \(groupSizeSelected)"
+        tipAmountCollection[0].text = String(format: "%.2f", (billTotal * (tipPercentSelected - 5) / 100))
+        tipAmountCollection[1].text = String(format: "%.2f", (billTotal * (tipPercentSelected) / 100))
+        tipAmountCollection[2].text = String(format: "%.2f", (billTotal * (tipPercentSelected + 5) / 100))
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        tipAmountCollection[0].text = "\((tipPercentSelected - 5.0) * billTotal / 100)"
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,6 +58,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    
+    
 }
 
