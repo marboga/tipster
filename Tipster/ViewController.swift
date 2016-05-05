@@ -26,13 +26,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var clearButton: UIButton!
     
     var groupSizeSelected: Int = 4
-    var tipPercentSelected: Double = 20.0
+    var tipPercentSelected = 20
     var billTotalString: String = "0"
     var billTotal: Double = 0
     
     @IBAction func tipPercentSliderChanged(sender: UISlider) {
-        tipPercentSelected = Double(sender.value)
-        tipPercentValue.text = "Tip: \(Int(tipPercentSelected))"
+        tipPercentSelected = Int(sender.value)
+        tipPercentValue.text = "Tip: \(tipPercentSelected)%"
         updateDisplayUI()
     }
     
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
             if sender.tag != 10 {
                 billTotalString = String(sender.tag)
             } else {
-                billTotalString = "."
+                billTotalString = "0."
             }
         } else {
             if sender.tag != 10 {
@@ -61,10 +61,15 @@ class ViewController: UIViewController {
     }
     
     
+    @IBAction func clearButtonActivated(sender: UIButton) {
+        billTotalString = "0"
+        updateDisplayUI()
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tipAmountCollection[0].text = "\((tipPercentSelected - 5.0) * Double(billTotalString)! / 100)"
-        billTotal = 0
+        tipPercentValue.text = "Tip: \(tipPercentSelected)%"
         updateDisplayUI()
     }
 
@@ -76,13 +81,20 @@ class ViewController: UIViewController {
     func updateDisplayUI() {
         resultLabel.text = billTotalString
         groupSizeValue.text = "Group size: \(groupSizeSelected)"
-        tipAmountCollection[0].text = String(format: "%.2f", (Double(billTotalString)! * (tipPercentSelected - 5) / Double(groupSizeSelected) / 100 ))
-        tipAmountCollection[1].text = String(format: "%.2f", (Double(billTotalString)! * (tipPercentSelected) / Double(groupSizeSelected) / 100))
-        tipAmountCollection[2].text = String(format: "%.2f", (Double(billTotalString)! * (tipPercentSelected + 5) / Double(groupSizeSelected) / 100))
-        tipPercentCollection[0].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected - 5), "%")
-        tipPercentCollection[1].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected), "%")
-        tipPercentCollection[2].text = String.localizedStringWithFormat("%.0f %@",(tipPercentSelected + 5), "%")
+        tipAmountCollection[0].text = String(format: "%.2f", (Double(billTotalString)! * Double(tipPercentSelected - 5) / Double(groupSizeSelected) / 100 ))
+        tipAmountCollection[1].text = String(format: "%.2f", (Double(billTotalString)! * Double(tipPercentSelected) / Double(groupSizeSelected) / 100))
+        tipAmountCollection[2].text = String(format: "%.2f", (Double(billTotalString)! * Double(tipPercentSelected + 5) / Double(groupSizeSelected) / 100))
+        billAmountCollection[0].text = String(format: "%.2f", (Double(billTotalString)! / Double(groupSizeSelected) + Double(tipAmountCollection[0].text!)!))
+        billAmountCollection[1].text = String(format: "%.2f", (Double(billTotalString)! / Double(groupSizeSelected) + Double(tipAmountCollection[1].text!)!))
+        billAmountCollection[2].text = String(format: "%.2f", (Double(billTotalString)! / Double(groupSizeSelected) + Double(tipAmountCollection[2].text!)!))
+        tipPercentCollection[0].text = "\(tipPercentSelected - 5)%"
+        tipPercentCollection[1].text = "\(tipPercentSelected)%"
+        tipPercentCollection[2].text = "\(tipPercentSelected + 5)%"
+        
+        
+        
     }
+    
     
 }
 
